@@ -1,0 +1,40 @@
+import pandas as pd  #引入工具
+import numpy as np
+
+
+#def定义，先占位
+def run_backtest(df,target_col, short_window, long_window):   
+    # 计算每日涨跌幅（收益率）
+    df['Asset_Return'] = df[target_col].pct_change()#资产收益率，目标列
+    #均线
+    df['MA_Short']=df[target_col].rolling(window=short_window).mean()
+    df['MA_Long']=df[target_col].rolling(window=long_window).mean()
+
+    #金叉，多头排列
+    df['Signal'] = np.where(df['MA_Short'] > df['MA_Long'], 1, 0)
+    
+    #下移一行
+    df["Position"] = df["Signal"].shift(1)
+
+    #新加一行
+    df['Strategy_Return'] = df['Position'] * df['Asset_Return']#策略每日收益，仓位
+
+    df["accumulated_net_asset_value"] = (1 + df["Asset_Return"]).cumprod()#资产累计净值
+
+    df["Strategy_Net_Value"] = (1 + df["Strategy_Return"]).cumprod()#策略累计净值，策略每日收益
+
+    
+
+    return df
+
+df = pd.read_csv('/home/asd_a/quant-learning/merged_daily.csv', encoding='utf-8-sig')#列表
+
+
+
+result_1 = run_backtest(df.copy(),"茅台收盘",5,20)
+result_2 = run_backtest(df.copy(),"茅台收盘",10,30)
+result_3 = run_backtest(df.copy(),"茅台收盘",3,15)
+
+print("参数5-20最终净值:",result_1['Strategy_Net_Value'].iloc[-1])
+print('参数10-30最终净值:',result_2['Strategy_Net_Value'].iloc[-1])
+print("参数3-15最终净值:",result_3['Strategy_Net_Value'].iloc[-1])
