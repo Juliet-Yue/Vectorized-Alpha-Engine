@@ -14,6 +14,6 @@ df = ak.stock_zh_a_hist(
 df = df[["日期", "开盘", "最高", "最低", "收盘", "成交量"]]
 
 # 3. 保存为 CSV 文件（也可以改成 .xlsx 保存为 Excel）
-df.to_csv("guizhou_maotai_daily.csv", index=False, encoding="utf-8-sig")
+df.to_csv("data/guizhou_maotai_daily.csv", index=False, encoding="utf-8-sig")
 print("✅ 数据已保存为 guizhou_maotai_daily.csv")
 print(f"📊 共获取 {len(df)} 行数据，时间范围：{df['日期'].min()} ~ {df['日期'].max()}")

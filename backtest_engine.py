@@ -57,7 +57,7 @@ class VectorizedBacktester:
         return sharpe, max_dd 
 
 
-df = pd.read_csv('/home/asd_a/quant-learning/merged_daily.csv', encoding='utf-8-sig')
+df = pd.read_csv('data/merged_daily.csv', encoding='utf-8-sig')
 
 result_maotai = VectorizedBacktester(df, target_col='茅台收盘', cost_rate=0.002)
 result_pingan = VectorizedBacktester(df, target_col='平安收盘', cost_rate=0.002)
